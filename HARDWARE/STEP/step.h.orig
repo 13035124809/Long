@@ -1,0 +1,34 @@
+#ifndef __STEP_H
+#define __STEP_H
+#include "sys.h"
+
+
+
+
+
+
+void speed0_up( u32 step0,u32 Speed0);  
+void speed0_dowm( u32 step0,u32 Speed0);  
+void speed1_up( u32 step1,u32 Speed1);  
+void speed1_dowm( u32 step1,u32 Speed1);  
+void speed2_up( u32 step2,u32 Speed2);  
+void speed2_dowm( u32 step2,u32 Speed2);  
+void speed3_up( u32 step3,u32 Speed3);  
+void speed3_dowm( u32 step3,u32 Speed3);  
+void speed_up(s32 step0,s32 Speed0,s32 step1,s32 Speed1,s32 step2,s32 Speed2,s32 step3,s32 Speed3);
+void speed_down(s32 step0,s32 Speed0,s32 step1,s32 Speed1,s32 step2,s32 Speed2,s32 step3,s32 Speed3);
+void run(s32 step0,s32 Speed0,s32 step1,s32 Speed1,s32 step2,s32 Speed2,s32 step3,s32 Speed3);
+
+
+
+
+
+
+
+
+
+#endif
+
+
+
+
