@@ -403,7 +403,7 @@ void left_run1(s32 step)
     speed_down(350,45,-350,45,350,45,-350,45);
 }
 void left_run2(s32 step)
-{   int corr; 
+{   int corr;
     speed_up(step,45,-step,45,step,45,-step,45);
     Correct_or();
     run(10000,35,-10000,35,10000,35,-10000,35);
@@ -426,18 +426,18 @@ void left_run2(s32 step)
             }
         }
     }
-    run(1200,35,-1200,35,1200,35,-1200,35);
+    run(1000,35,-1000,35,1000,35,-1000,35);
     Correct_or();
-    speed_down(200,45,-200,45,200,45,-200,45);
+    speed_down(350,45,-350,45,350,45,-350,45);
 }
 void auto_trans(int x)
 {   int corr=1;
-    s32 step;float L,R;
+    s32 step;
+    float L,R;
     if(x==0)
     {
         while(corr)
         {
-            delay_ms(6);
             UWaveBackRight_Send();
             if(BackRight_dist>=0&&BackRight_dist<=400)
             {   delay_ms(6);
@@ -447,20 +447,25 @@ void auto_trans(int x)
                     delay_ms(6);
                     if(BackRight_dist>=30&&BackRight_dist<=400)
                     {
-                        step=(BackRight_dist-30)*5;
+                        step=(BackRight_dist-50)*3.5;
+                        printf("%f\r\n",BackRight_dist);
+                        printf("%d\r\n",step);
                         speed_up1(200,step,75,step,75,-step,75,-step,75);
                         Correct_or();
                         if(BackRight_dist>=30&&BackRight_dist<=70)
                         {
                             corr=0;
                         }
+                        if(step<30&&step>0)
+                        {
+                            corr=0;
+                        }
+                        if(step<0&&step>-30)
+                        {
+                            corr=0;
+                        }
                     }
-                    if(BackRight_dist<30)
-                    {
-                        speed_up1(200,-80,95,-80,95,80,95,80,95);
-                        Correct_or();
-                        //corr=0;
-                    }
+
                 }
             }
         }
@@ -499,17 +504,20 @@ void auto_trans(int x)
                     if(Front_dist>=30&&Front_dist<=400)
                     {
                         step=(Front_dist-80)*3.6;
-                        speed_up1(200,-step,75,-step,75,step,75,step,75);
+                        speed_up1(150,-step,75,-step,75,step,75,step,75);
                         Correct_or();
-                        if(Front_dist>=30&&Front_dist<=95)
+                        if(Front_dist>=60&&Front_dist<=100)
                         {
                             corr=0;
                         }
                     }
-                    if(Front_dist<30)
+                    if(step<30&&step>30)
                     {
-                        speed_up1(200,50,95,50,95,-50,95,-50,95);
-                        Correct_or();
+                        corr=0;
+                    }
+                    if(step<0&&step>-30)
+                    {
+                        corr=0;
                     }
                 }
             }
@@ -527,26 +535,26 @@ void auto_trans(int x)
                 UWaveBackLeft_Send();
                 UWaveBackRight_Send();
                 if(BackRight_dist>=0&&BackRight_dist<=400)
-                {       if(BackRight_dist>80&&BackLeft_dist>90)
-                   {   step=(BackRight_dist-40)*1.2;
-                       speed_up1(200,step,95,step,95,-step,95,-step,95);
-                       Correct_or();  
-                   }
-                   if(BackRight_dist<40&&BackLeft_dist<50)
-                   {   if((BackRight_dist-BackLeft_dist)>20)
-                       {
-                       step=(50-BackLeft_dist)*1.2;
-                       speed_up1(200,step,95,step,95,step,95,step,95);
-                       Correct_or(); 
-                       }else
-                       {
-                       speed_up1(200,-step,95,-step,95,-step,95,-step,95);
-                       Correct_or();  
-                       }
-                       step=(40-BackRight_dist)*1.2;
-                       speed_up1(200,-step,95,-step,95,step,95,step,95);
-                       Correct_or();  
-                   }
+                {   if(BackRight_dist>80&&BackLeft_dist>90)
+                    {   step=(BackRight_dist-40)*1.2;
+                        speed_up1(200,step,95,step,95,-step,95,-step,95);
+                        Correct_or();
+                    }
+                    if(BackRight_dist<40&&BackLeft_dist<50)
+                    {   if((BackRight_dist-BackLeft_dist)>20)
+                        {
+                            step=(50-BackLeft_dist)*1.2;
+                            speed_up1(200,step,95,step,95,step,95,step,95);
+                            Correct_or();
+                        } else
+                        {
+                            speed_up1(200,-step,95,-step,95,-step,95,-step,95);
+                            Correct_or();
+                        }
+                        step=(40-BackRight_dist)*1.2;
+                        speed_up1(200,-step,95,-step,95,step,95,step,95);
+                        Correct_or();
+                    }
                     delay_ms(6);
                     UWaveBackLeft_Send();
                     UWaveBackRight_Send();
@@ -556,15 +564,18 @@ void auto_trans(int x)
                         UWaveBackLeft_Send();
                         UWaveBackRight_Send();
                         if(BackRight_dist>=40&&BackRight_dist<=80)
-                        {   L=BackLeft_dist;R=BackRight_dist;
-                            if((L>(R-10))&&(L<(R+5))){corr=0;}
+                        {   L=BackLeft_dist;
+                            R=BackRight_dist;
+                            if((L>(R-10))&&(L<(R+5))) {
+                                corr=0;
+                            }
                             if(L>R)
                             {
                                 step=(L-R)*0.9;
                                 //if(step<25)step=25;
                                 speed_up1(200,step,95,step,95,step,95,step,95);
                                 Correct_or();
-                                
+
                             }
                             if(R>L)
                             {
@@ -572,22 +583,23 @@ void auto_trans(int x)
                                 //if(step<25)step=25;
                                 speed_up1(200,-step,95,-step,95,-step,95,-step,95);
                                 Correct_or();
-                                
+
                             }
                         }
                     }
-                    L=BackLeft_dist;R=BackRight_dist;
+                    L=BackLeft_dist;
+                    R=BackRight_dist;
                     if((L-R)>40)
                     {
-                                step=(L-R)*0.9;
-                                speed_up1(200,step,95,step,95,step,95,step,95);
-                                Correct_or();
+                        step=(L-R)*0.9;
+                        speed_up1(200,step,95,step,95,step,95,step,95);
+                        Correct_or();
                     }
                     if((R-L)>40)
                     {
-                                step=(R-L)*0.9;
-                                speed_up1(200,-step,95,-step,95,-step,95,-step,95);
-                                Correct_or();
+                        step=(R-L)*0.9;
+                        speed_up1(200,-step,95,-step,95,-step,95,-step,95);
+                        Correct_or();
                     }
                 }
             }
@@ -679,10 +691,10 @@ void Self_tuning(int x,s32 step0,s32 Speed0,s32 step1,s32 Speed1,s32 step2,s32 S
             if(PFin(1)==0&&PFin(2)==0&&PFin(3)==0&&PFin(4)==0)
             {   delay_ms(25);
                 if(PFin(1)==0&&PFin(2)==0&&PFin(3)==0&&PFin(4)==0)
-                {        
+                {
                     //printf("У׼/r/n");
                     if(x==0)
-                    { 
+                    {
                         speed_up3(6000,25,6000,25,-6000,25,-6000,25);
                         Correct_or();
                         run(step0,25,step1,25,step2,25,step3,25);
@@ -707,14 +719,14 @@ void Self_tuning(int x,s32 step0,s32 Speed0,s32 step1,s32 Speed1,s32 step2,s32 S
                                 }
                             }
                         }
-                         run(200,30,200,30,-200,30,-200,30);
-                         Correct_or();
-                         run(200,35,200,35,-200,35,-200,35);
-                         Correct_or(); 
-                         run(200,40,200,40,-200,40,-200,40);
-                         Correct_or(); 
-                         run(200,43,200,43,-200,43,-200,43);
-                         Correct_or(); 
+                        run(200,30,200,30,-200,30,-200,30);
+                        Correct_or();
+                        run(200,35,200,35,-200,35,-200,35);
+                        Correct_or();
+                        run(200,40,200,40,-200,40,-200,40);
+                        Correct_or();
+                        run(200,43,200,43,-200,43,-200,43);
+                        Correct_or();
                         run(7000,45,7000,45,-7000,45,-7000,45);
                         back_stop();
                         f=4;
@@ -723,9 +735,9 @@ void Self_tuning(int x,s32 step0,s32 Speed0,s32 step1,s32 Speed1,s32 step2,s32 S
                         break;
                     }
                     if(x==1)
-                    {    
-                         speed_up3(-6000,25,-6000,25,6000,25,6000,25);
-                         Correct_or(); 
+                    {
+                        speed_up3(-6000,25,-6000,25,6000,25,6000,25);
+                        Correct_or();
                         run(step0,25,step1,25,step2,25,step3,25);
                         if(motor[0].target!=motor[0].step) {
                             corr=1;
@@ -748,14 +760,14 @@ void Self_tuning(int x,s32 step0,s32 Speed0,s32 step1,s32 Speed1,s32 step2,s32 S
                                 }
                             }
                         }
-                         run(-200,30,-200,30,200,30,200,30);
-                         Correct_or();
-                         run(-200,35,-200,35,200,35,200,35);
-                         Correct_or(); 
-                         run(-200,40,-200,40,200,40,200,40);
-                         Correct_or(); 
-                         run(-200,43,-200,43,200,43,200,43);
-                         Correct_or();     
+                        run(-200,30,-200,30,200,30,200,30);
+                        Correct_or();
+                        run(-200,35,-200,35,200,35,200,35);
+                        Correct_or();
+                        run(-200,40,-200,40,200,40,200,40);
+                        Correct_or();
+                        run(-200,43,-200,43,200,43,200,43);
+                        Correct_or();
                         run(-7000,45,-7000,45,7000,45,7000,45);
                         front_stop();
                         f=4;
@@ -917,89 +929,89 @@ void Self_tuning(int x,s32 step0,s32 Speed0,s32 step1,s32 Speed1,s32 step2,s32 S
         }
 //////////////////
         if(flag==5)
-        {   
+        {
             if(x==0)
-            { 
-                        speed_up3(6000,25,6000,25,-6000,25,-6000,25);
-                        Correct_or();
-                        run(step0,25,step1,25,step2,25,step3,25);
-                        if(motor[0].target!=motor[0].step) {
-                            corr=1;
-                        }
-                        while(corr)
-                        {
-                            if(PFin(1)==1&&PFin(2)==1)
+            {
+                speed_up3(6000,25,6000,25,-6000,25,-6000,25);
+                Correct_or();
+                run(step0,25,step1,25,step2,25,step3,25);
+                if(motor[0].target!=motor[0].step) {
+                    corr=1;
+                }
+                while(corr)
+                {
+                    if(PFin(1)==1&&PFin(2)==1)
+                    {   delay_ms(10);
+                        {   if(PFin(1)==1&&PFin(2)==1)
                             {   delay_ms(10);
-                                {   if(PFin(1)==1&&PFin(2)==1)
-                                    {   delay_ms(10);
-                                        if(PFin(1)==1&&PFin(2)==1)
-                                        {
-                                            motor[0].step=motor[0].target=0;
-                                            motor[1].step=motor[1].target=0;
-                                            motor[2].step=motor[2].target=0;
-                                            motor[3].step=motor[3].target=0;
-                                            corr=0;
-                                        }
-                                    }
+                                if(PFin(1)==1&&PFin(2)==1)
+                                {
+                                    motor[0].step=motor[0].target=0;
+                                    motor[1].step=motor[1].target=0;
+                                    motor[2].step=motor[2].target=0;
+                                    motor[3].step=motor[3].target=0;
+                                    corr=0;
                                 }
                             }
                         }
-                         run(200,30,200,30,-200,30,-200,30);
-                         Correct_or();
-                         run(200,35,200,35,-200,35,-200,35);
-                         Correct_or(); 
-                         run(200,40,200,40,-200,40,-200,40);
-                         Correct_or(); 
-                         run(200,43,200,43,-200,43,-200,43);
-                         Correct_or(); 
-                        run(7000,45,7000,45,-7000,45,-7000,45);
-                        back_stop();
-                        f=4;
-                        speed_down(350,45,350,45,-350,45,-350,45);
-                        //Correct_or();
-                        break;
                     }
+                }
+                run(200,30,200,30,-200,30,-200,30);
+                Correct_or();
+                run(200,35,200,35,-200,35,-200,35);
+                Correct_or();
+                run(200,40,200,40,-200,40,-200,40);
+                Correct_or();
+                run(200,43,200,43,-200,43,-200,43);
+                Correct_or();
+                run(7000,45,7000,45,-7000,45,-7000,45);
+                back_stop();
+                f=4;
+                speed_down(350,45,350,45,-350,45,-350,45);
+                //Correct_or();
+                break;
+            }
             if(x==1)
-            {    
-                         speed_up3(-6000,25,-6000,25,6000,25,6000,25);
-                         Correct_or(); 
-                        run(step0,25,step1,25,step2,25,step3,25);
-                        if(motor[0].target!=motor[0].step) {
-                            corr=1;
-                        }
-                        while(corr)
-                        {
-                            if(PFin(3)==1&&PFin(4)==1)
+            {
+                speed_up3(-6000,25,-6000,25,6000,25,6000,25);
+                Correct_or();
+                run(step0,25,step1,25,step2,25,step3,25);
+                if(motor[0].target!=motor[0].step) {
+                    corr=1;
+                }
+                while(corr)
+                {
+                    if(PFin(3)==1&&PFin(4)==1)
+                    {   delay_ms(10);
+                        {   if(PFin(3)==1&&PFin(4)==1)
                             {   delay_ms(10);
-                                {   if(PFin(3)==1&&PFin(4)==1)
-                                    {   delay_ms(10);
-                                        if(PFin(3)==1&&PFin(4)==1)
-                                        {
-                                            motor[0].step=motor[0].target=0;
-                                            motor[1].step=motor[1].target=0;
-                                            motor[2].step=motor[2].target=0;
-                                            motor[3].step=motor[3].target=0;
-                                            corr=0;
-                                        }
-                                    }
+                                if(PFin(3)==1&&PFin(4)==1)
+                                {
+                                    motor[0].step=motor[0].target=0;
+                                    motor[1].step=motor[1].target=0;
+                                    motor[2].step=motor[2].target=0;
+                                    motor[3].step=motor[3].target=0;
+                                    corr=0;
                                 }
                             }
                         }
-                         run(-200,30,-200,30,200,30,200,30);
-                         Correct_or();
-                         run(-200,35,-200,35,200,35,200,35);
-                         Correct_or(); 
-                         run(-200,40,-200,40,200,40,200,40);
-                         Correct_or(); 
-                         run(-200,43,-200,43,200,43,200,43);
-                         Correct_or();     
-                        run(-7000,45,-7000,45,7000,45,7000,45);
-                        front_stop();
-                        f=4;
-                        speed_down(-350,45,-350,45,350,45,350,45);
-                        //Correct_or();
-                        break;
                     }
+                }
+                run(-200,30,-200,30,200,30,200,30);
+                Correct_or();
+                run(-200,35,-200,35,200,35,200,35);
+                Correct_or();
+                run(-200,40,-200,40,200,40,200,40);
+                Correct_or();
+                run(-200,43,-200,43,200,43,200,43);
+                Correct_or();
+                run(-7000,45,-7000,45,7000,45,7000,45);
+                front_stop();
+                f=4;
+                speed_down(-350,45,-350,45,350,45,350,45);
+                //Correct_or();
+                break;
+            }
             if(x==2)
             {
                 speed_up3(2600,25,2600,25,-2600,25,-2600,25);
